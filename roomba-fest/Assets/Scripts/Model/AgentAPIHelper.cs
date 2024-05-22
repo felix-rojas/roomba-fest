@@ -6,13 +6,15 @@ public static class AgentAPIHelper
 {
     public static Agent GetData()
     {
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("localhost:8585");
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8585/");
 
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-        StreamReader reader = new StreamReader(response.GetResponseStream());
+        StreamReader reader = new(response.GetResponseStream());
 
         string json = reader.ReadToEnd();
+
+        Debug.Log(json);
 
         return JsonUtility.FromJson<Agent>(json);
     }
