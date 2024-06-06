@@ -1,9 +1,10 @@
 from mesa import Agent
-import random
 import heapq
 import numpy as np
 
 DEBUG = False
+
+
 class Basura(Agent):
     def __init__(self, unique_id, model, cantidad):
         super().__init__(unique_id, model)
@@ -20,9 +21,12 @@ class Basura(Agent):
             for agent in self.agents_on_top:
                 if isinstance(agent, AgenteRobot):
                     self.notify(agent)
+
+
 class Obstaculo(Agent):
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+
 
 class Papelera(Agent):
     def __init__(self, unique_id, model):
@@ -40,6 +44,7 @@ def NewShuffle(arr):
     # Convertir de nuevo a lista de tuplas
     return [tuple(item) for item in mutable_arr]
 
+
 def reconstruct_path(came_from, current):
     total_path = [current]
     while current in came_from:
@@ -49,9 +54,11 @@ def reconstruct_path(came_from, current):
     total_path.reverse()
     return total_path
 
+
 def heuristic(a, b):
     # manhattan distance
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
 
 def a_star_search(grid, start, goal):
     open_list = []
@@ -78,6 +85,7 @@ def a_star_search(grid, start, goal):
                 heapq.heappush(open_list, (f_score[neighbor], neighbor))
 
     return None  # No se encontró ningún camino
+
 
 #Nombre: AgenteRobot
 #Parametros: Ninguno.
@@ -108,7 +116,8 @@ class AgenteRobot(Agent):
                 self.model.grid.remove_agent(trash)
                 self.carrying += 1
                 if DEBUG:
-                    print(f"Robot {self.unique_id} recogió basura en {self.pos}. Almacenamiento: {self.carrying}/{self.capacity}")
+                    print(
+                        f"Robot {self.unique_id} recogió basura en {self.pos}. Almacenamiento: {self.carrying}/{self.capacity}")
 
     def empty(self):
         self.carrying = 0
@@ -171,4 +180,4 @@ class AgenteRobot(Agent):
                 self.find_path_to_papelera()
         if not self.returning:
             self.clean()  # Collect trash in the current cell
-        self.move()   # Move to a new cell or towards the papelera
+        self.move()  # Move to a new cell or towards the papelera
