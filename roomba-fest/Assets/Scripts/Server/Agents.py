@@ -5,46 +5,6 @@ import numpy as np
 DEBUG = False
 
 
-class Basura(Agent):
-    def __init__(self, unique_id, model, cantidad):
-        super().__init__(unique_id, model)
-        self.qty = cantidad
-        self.agents_on_top = None
-
-    def notify(self, AgenteRobot):
-        AgenteRobot.clean()
-
-    def step(self):
-        self.agents_on_top = model.grid.get_cell_list_contents([self.pos])
-
-        if self.agents_on_top:
-            for agent in self.agents_on_top:
-                if isinstance(agent, AgenteRobot):
-                    self.notify(agent)
-
-
-class Obstaculo(Agent):
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-
-
-class Papelera(Agent):
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-        self.position = self.pos
-
-
-def NewShuffle(arr):
-    mutable_arr = [list(item) for item in arr]
-    n = len(mutable_arr)
-    for i in range(n - 1, 0, -1):
-        j = np.random.randint(0, i)
-        mutable_arr[i], mutable_arr[j] = mutable_arr[j], mutable_arr[i]
-
-    # Convertir de nuevo a lista de tuplas
-    return [tuple(item) for item in mutable_arr]
-
-
 def reconstruct_path(came_from, current):
     total_path = [current]
     while current in came_from:
@@ -87,10 +47,10 @@ def a_star_search(grid, start, goal):
     return None  # No se encontró ningún camino
 
 
-#Nombre: AgenteRobot
-#Parametros: Ninguno.
-#Return: Nada
-#Se encarga de servir como base para crear agentes de tipo aspiradora
+# Nombre: AgenteRobot
+# Parametros: Ninguno.
+# Return: Nada
+# Se encarga de servir como base para crear agentes de tipo aspiradora
 class AgenteRobot(Agent):
     def __init__(self, id, model):
         super().__init__(id, model)
@@ -101,7 +61,7 @@ class AgenteRobot(Agent):
         self.steps_since_last_path_update = 0
 
     def almacenamiento(self):
-        print(f'El robot {self.unique_id} tiene actualmente {self.carrying} unidades de basura')
+        if DEBUG: print(f'El robot {self.unique_id} tiene actualmente {self.carrying} unidades de basura')
 
     def clean(self):
         cell_contents = self.model.grid.get_cell_list_contents([self.pos])
@@ -117,7 +77,8 @@ class AgenteRobot(Agent):
                 self.carrying += 1
                 if DEBUG:
                     print(
-                        f"Robot {self.unique_id} recogió basura en {self.pos}. Almacenamiento: {self.carrying}/{self.capacity}")
+                        f"Robot {self.unique_id} recogió basura en {self.pos}. "
+                        f"Almacenamiento: {self.carrying}/{self.capacity}")
 
     def empty(self):
         self.carrying = 0
@@ -128,29 +89,11 @@ class AgenteRobot(Agent):
     def find_path_to_papelera(self):
         self.path_to_papelera = a_star_search(self.model.grid, self.pos, self.model.papelera_coords)
         if self.path_to_papelera:
-            self.path_to_papelera.pop(0)  # Remove the current position
-
-    #def move(self):
-    #if self.returning and self.path_to_papelera:
-    # new_position = self.path_to_papelera.pop(0)
-    #self.model.grid.move_agent(self, new_position)
-    #if np.all(new_position == self.model.papelera_coords):
-    # self.empty()
-    #else:
-    # options=self.model.grid.get_neighborhood(self.pos,moore = True, include_center=False)
-    #valid_moves = []
-    #for pos in options:
-    # cell_contents = self.model.grid.get_cell_list_contents(pos)
-    # if not any(isinstance(obj, (Obstaculo, AgenteRobot)) for obj in cell_contents):
-    #  valid_moves.append(pos)
-
-    #if valid_moves:
-    # new_position = random.choice(valid_moves)
-    #self.model.grid.move_agent(self, new_position)
+            self.path_to_papelera.pop(0)  # Remove the current position 
 
     def move(self):
         if self.returning:
-            print(f"Robot {self.unique_id} retoma su camino hacia la papelera.")
+            if DEBUG: print(f"Robot {self.unique_id} retoma su camino hacia la papelera.")
             if not self.path_to_papelera or self.steps_since_last_path_update >= 4:
                 self.find_path_to_papelera()
                 self.steps_since_last_path_update = 0
@@ -161,7 +104,7 @@ class AgenteRobot(Agent):
                 if np.all(new_position == self.model.papelera_coords):
                     self.empty()
         else:
-            print(f"Robot {self.unique_id} Moviendose al azar")
+            if DEBUG: print(f"Robot {self.unique_id} Moviendose al azar")
             options = self.model.grid.get_neighborhood(self.pos, moore=True, include_center=False)
             valid_moves = []
             for pos in options:
@@ -181,3 +124,32 @@ class AgenteRobot(Agent):
         if not self.returning:
             self.clean()  # Collect trash in the current cell
         self.move()  # Move to a new cell or towards the papelera
+
+
+class Basura(Agent):
+    def __init__(self, unique_id, model, cantidad):
+        super().__init__(unique_id, model)
+        self.qty = cantidad
+        self.agents_on_top = None
+
+    def notify(self, AgenteRobot):
+        AgenteRobot.clean()
+
+    def step(self):
+        self.agents_on_top = model.grid.get_cell_list_contents([self.pos])
+
+        if self.agents_on_top:
+            for agent in self.agents_on_top:
+                if isinstance(agent, AgenteRobot):
+                    self.notify(agent)
+
+
+class Obstaculo(Agent):
+    def __init__(self, unique_id, model):
+        super().__init__(unique_id, model)
+
+
+class Papelera(Agent):
+    def __init__(self, unique_id, model):
+        super().__init__(unique_id, model)
+        self.position = self.pos

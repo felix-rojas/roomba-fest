@@ -57,7 +57,8 @@ class OficinaModel(Model):
         self.height = height
         self.initial_grid, self.papelera_coords = generate_test_grid(width=width, height=height)
 
-        self.datacollector = DataCollector(model_reporters = {"Grid" : getGrid })
+        self.datacollector = DataCollector(model_reporters = {"Grid" : getGrid }, 
+                                           agent_reporters = {"Position": "pos", "Carrying": "carrying" })
 
         obstaculo_id = 0
         basura_id = 0
@@ -93,7 +94,7 @@ class OficinaModel(Model):
 
     def allAgentsEmpty(self):
         empty = all(agent.carrying == 0 for agent in self.schedule.agents if isinstance(agent, Agents.AgenteRobot))
-        print(f'Agentes vacíos: {empty}')
+        if DEBUG: print(f'Agentes vacíos: {empty}')
         return empty
 
 
@@ -105,7 +106,7 @@ class OficinaModel(Model):
 
     def allCellClean(self):
         self.basuraRestante = sum(isinstance(obj, Agents.Basura) for cell in self.grid.coord_iter() for obj in cell[0])
-        print(f'Basura restante es: {self.basuraRestante}')
+        if DEBUG: print(f'Basura restante es: {self.basuraRestante}')
         return self.basuraRestante == 0
 
     def SimulationDone(self):
@@ -117,13 +118,13 @@ class OficinaModel(Model):
     def SimulationDonecomprobation(self):
         all_clean = self.allCellClean()
         all_empty = self.allAgentsEmpty()
-        print(f'SimulationDone -> all_clean: {all_clean}, all_empty: {all_empty}')
+        if DEBUG: print(f'SimulationDone -> all_clean: {all_clean}, all_empty: {all_empty}')
         return all_clean and all_empty
 
     def step(self):
         self.datacollector.collect(self)
         self.schedule.step()
         if self.allCellClean() and self.allAgentsEmpty():
-            print(f'Todas las celdas están limpias y todos los robots han vaciado su basura en {self.currentStep} pasos.')
+            if DEBUG: print(f'Todas las celdas están limpias y todos los robots han vaciado su basura en {self.currentStep} pasos.')
         self.currentStep += 1
         self.SimulationDonecomprobation()

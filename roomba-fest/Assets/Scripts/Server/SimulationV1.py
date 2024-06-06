@@ -63,10 +63,13 @@ MAX_ITER = 2000
 AGENT_NUM = 5
 model = OficinaModel.OficinaModel(ANCHO, ALTO, AGENT_NUM)
 
-
+CURRENT_ITER = -1
 def advanceSimulation():
     model.step()
-    return model.datacollector.get_model_vars_dataframe()
+    info = model.datacollector.get_agent_vars_dataframe()
+    last_step = info.index.get_level_values("Step").max()
+    position = info.xs(last_step, level="Step")
+    return position
 
 # Obtenemos la informacion requerida para el analsis.
 # all_grid = model.datacollector.get_model_vars_dataframe()
