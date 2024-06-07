@@ -31,10 +31,33 @@ public class WebClient : MonoBehaviour
             }
             else
             {
-                Debug.Log(www.downloadHandler.text);    // Answer from Python
-                Vector3 tPos = JsonUtility.FromJson<Vector3>(www.downloadHandler.text.Replace('\'', '\"'));
+                Debug.Log(www.downloadHandler.text);
+                //writeObject(text_thing);
+                var data_res = JsonUtility.FromJson<DataModel>(www.downloadHandler.text);
+                Debug.Log(data_res);
                 //Debug.Log("Form upload complete!");
-                Debug.Log(tPos);
+            }
+        }
+
+    }
+
+    // IEnumerator - yield return
+    IEnumerator GetGridData()
+    {
+        WWWForm form = new WWWForm();
+        string url = "http://localhost:8585";
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
+        {
+            www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+
+            yield return www.SendWebRequest();          // Talk to Python
+            if((www.result == UnityWebRequest.Result.ConnectionError) || ((www.result == UnityWebRequest.Result.ProtocolError)))
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                gridInfo(www.downloadHandler.text);
             }
         }
 
@@ -48,6 +71,7 @@ public class WebClient : MonoBehaviour
         Vector3 fakePos = new Vector3(3.44f, 0, -15.707f);
         string json = EditorJsonUtility.ToJson(fakePos);
         //StartCoroutine(SendData(call));
+        StartCoroutine(GetGridData());
         StartCoroutine(SendData(json));
         // transform.localPosition
     }
@@ -57,4 +81,14 @@ public class WebClient : MonoBehaviour
     {
         
     }
+    
+    public void gridInfo(string grid){
+    string[] grid_info = grid.Split(",");
+    foreach (string a in grid_info)
+{
+    Debug.Log($"{a} ");
+}
+    
+}
+    
 }

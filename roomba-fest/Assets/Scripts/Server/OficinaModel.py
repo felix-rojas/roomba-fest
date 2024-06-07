@@ -57,7 +57,7 @@ class OficinaModel(Model):
         self.height = height
         self.initial_grid, self.papelera_coords = generate_test_grid(width=width, height=height)
 
-        self.datacollector = DataCollector(model_reporters = {"Grid": "initial_grid", "TrashBin": "papelera_coords" "GridStatus": getGrid}, 
+        self.datacollector = DataCollector(model_reporters = {"Grid": "initial_grid", "TrashBin": "papelera_coords" , "GridStatus": getGrid}, 
                                            agent_reporters = {"Position": "pos", "Carrying": "carrying" })
 
         obstaculo_id = 0

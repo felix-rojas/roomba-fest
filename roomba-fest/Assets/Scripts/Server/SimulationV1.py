@@ -72,8 +72,14 @@ def advanceSimulation():
     position = info.xs(last_step, level="Step")
     return position.to_json()
 def sendGrid():
-    df = pd.DataFrame(model.initial_grid)
-    return df.to_json()
+    rows = len(model.initial_grid.tolist())
+    cols = len(model.initial_grid.tolist()[0])    
+    grid_list = model.initial_grid.tolist()
+    res = [str(rows),str(cols)]
+    for lists in grid_list:
+        for item in lists:
+            res.append(str(item))
+    return ",".join(res)
 
 # Obtenemos la informacion requerida para el analsis.
 # all_grid = model.datacollector.get_model_vars_dataframe()
