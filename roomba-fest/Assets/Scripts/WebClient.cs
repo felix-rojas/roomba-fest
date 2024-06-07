@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 
 public class WebClient : MonoBehaviour
 {
+    public string[] Grid;
     // IEnumerator - yield return
     IEnumerator SendData(string data)
     {
@@ -33,8 +34,8 @@ public class WebClient : MonoBehaviour
             {
                 Debug.Log(www.downloadHandler.text);
                 //writeObject(text_thing);
-                var data_res = JsonUtility.FromJson<DataModel>(www.downloadHandler.text);
-                Debug.Log(data_res);
+                //var data_res = JsonUtility.FromJson<DataModel>(www.downloadHandler.text);
+                //Debug.Log(data_res);
                 //Debug.Log("Form upload complete!");
             }
         }
@@ -57,6 +58,7 @@ public class WebClient : MonoBehaviour
             }
             else
             {
+                Grid = 
                 gridInfo(www.downloadHandler.text);
             }
         }
@@ -82,12 +84,9 @@ public class WebClient : MonoBehaviour
         
     }
     
-    public void gridInfo(string grid){
+    public string[] gridInfo(string grid){
     string[] grid_info = grid.Split(",");
-    foreach (string a in grid_info)
-{
-    Debug.Log($"{a} ");
-}
+    return grid_info;
     
 }
     
