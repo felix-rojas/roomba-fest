@@ -16,13 +16,14 @@ class Server(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        grid_res = SimulationV1.sendGrid()
         self._set_response()
-        self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
+        self.wfile.write(grid_res.encode('utf-8'))
 
     def do_POST(self):
-        grid = SimulationV1.advanceSimulation()
+        response = SimulationV1.advanceSimulation()
         self._set_response()
-        self.wfile.write(str(grid).encode('utf-8'))
+        self.wfile.write(response.encode('utf-8'))
 
 
 def run(server_class=HTTPServer, handler_class=Server, port=8585):
