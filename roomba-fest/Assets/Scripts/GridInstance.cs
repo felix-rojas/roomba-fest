@@ -11,10 +11,8 @@ public class GridInstance : MonoBehaviour
     int height, width;
     string[] initgrid;
     // Start is called before the first frame update
-    void OnEnable()
+    void SpawnObjects(string[] initgrid)
     {
-        initgrid = web.GetComponent<WebClient>().Grid;
-        if (initgrid.Length > 2) {
         height = int.Parse(initgrid[0]);
         
         width = int.Parse(initgrid[1]);
@@ -43,5 +41,4 @@ public class GridInstance : MonoBehaviour
             }
         }
     }
-}
 }

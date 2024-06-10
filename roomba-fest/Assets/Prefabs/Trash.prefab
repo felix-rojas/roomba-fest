@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7650035334337145813}
   - component: {fileID: 1699347821342945979}
   m_Layer: 0
-  m_Name: Box
+  m_Name: Trash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

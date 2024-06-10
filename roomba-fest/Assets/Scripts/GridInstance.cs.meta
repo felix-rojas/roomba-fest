@@ -3,7 +3,11 @@ guid: 66ddf785c38ce64408e854f95c78014b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - web: {instanceID: 0}
+  - wallPrefab: {fileID: 252413919567582462, guid: 0b8732f7dd49be64a9ffa46451b39353, type: 3}
+  - papeleroPrefab: {fileID: 2021929417151025362, guid: b82b800a9ec0e6f41bfc2b94c83d4143, type: 3}
+  - Trash: {fileID: 3017849234472675050, guid: 975e98e88c84cb94786a810bddaa79fe, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 
 public class WebClient : MonoBehaviour
 {
-    public string[] Grid;
+    public GameObject GridInstance;
     // IEnumerator - yield return
     IEnumerator SendData(string data)
     {
@@ -58,7 +58,6 @@ public class WebClient : MonoBehaviour
             }
             else
             {
-                Grid = 
                 gridInfo(www.downloadHandler.text);
             }
         }
@@ -87,6 +86,7 @@ public class WebClient : MonoBehaviour
     public string[] gridInfo(string grid){
     //Debug.Log($"{grid}");
     string[] grid_info = grid.Split(",");
+    GridInstance.SendMessage("SpawnObjects", grid_info);
     return grid_info;
     
 }
