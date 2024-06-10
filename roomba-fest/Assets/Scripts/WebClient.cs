@@ -85,6 +85,7 @@ public class WebClient : MonoBehaviour
     }
     
     public string[] gridInfo(string grid){
+    //Debug.Log($"{grid}");
     string[] grid_info = grid.Split(",");
     return grid_info;
     
