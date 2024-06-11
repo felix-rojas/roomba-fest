@@ -70,7 +70,9 @@ def advanceSimulation():
     info = model.datacollector.get_agent_vars_dataframe()
     last_step = info.index.get_level_values("Step").max()
     position = info.xs(last_step, level="Step")
-    return position.to_json()
+    res = position.reset_index()
+    print(res.to_json(orient='records'))
+    return res.to_json(orient='records')
 def sendGrid():
     rows = len(model.initial_grid.tolist())
     cols = len(model.initial_grid.tolist()[0])    

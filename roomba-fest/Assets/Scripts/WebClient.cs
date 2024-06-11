@@ -8,9 +8,12 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
+
 public class WebClient : MonoBehaviour
 {
     public GameObject GridInstance;
+    public GameObject AgentManager;
+
     // IEnumerator - yield return
     IEnumerator SendData(string data)
     {
@@ -20,26 +23,25 @@ public class WebClient : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(data);
-            www.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
-            www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-            //www.SetRequestHeader("Content-Type", "text/html");
+            www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
 
-            yield return www.SendWebRequest();          // Talk to Python
-            if((www.result == UnityWebRequest.Result.ConnectionError) || ((www.result == UnityWebRequest.Result.ProtocolError)))
+            yield return www.SendWebRequest(); // Talk to Python
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.Log(www.error);
             }
             else
             {
-                Debug.Log(www.downloadHandler.text);
-                //writeObject(text_thing);
-                //var data_res = JsonUtility.FromJson<DataModel>(www.downloadHandler.text);
-                //Debug.Log(data_res);
-                //Debug.Log("Form upload complete!");
+                string jsonData = www.downloadHandler.text;
+                List<AgentData> agents = JsonUtility.FromJson<AgentList>("{\"agents\":" + jsonData + "}").agents;
+                foreach (var agentData in agents)
+                {
+                    CreateAgent(agentData);
+                }
             }
         }
-
     }
 
     // IEnumerator - yield return
@@ -49,10 +51,10 @@ public class WebClient : MonoBehaviour
         string url = "http://localhost:8585";
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
-            www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            www.downloadHandler = new DownloadHandlerBuffer();
 
-            yield return www.SendWebRequest();          // Talk to Python
-            if((www.result == UnityWebRequest.Result.ConnectionError) || ((www.result == UnityWebRequest.Result.ProtocolError)))
+            yield return www.SendWebRequest(); // Talk to Python
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.Log(www.error);
             }
@@ -61,35 +63,39 @@ public class WebClient : MonoBehaviour
                 gridInfo(www.downloadHandler.text);
             }
         }
-
     }
-
 
     // Start is called before the first frame update
     void Start()
     {
-        //string call = "What's up?";
         Vector3 fakePos = new Vector3(3.44f, 0, -15.707f);
         string json = EditorJsonUtility.ToJson(fakePos);
-        
-        //StartCoroutine(SendData(call));
         StartCoroutine(GetGridData());
         StartCoroutine(SendData(json));
-        // transform.localPosition
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
-    
-    public string[] gridInfo(string grid){
-    //Debug.Log($"{grid}");
-    string[] grid_info = grid.Split(",");
-    GridInstance.SendMessage("SpawnObjects", grid_info);
-    return grid_info;
-    
+
+    public string[] gridInfo(string grid)
+    {
+        string[] grid_info = grid.Split(",");
+        GridInstance.SendMessage("SpawnObjects", grid_info);
+        return grid_info;
+    }
+
+    void CreateAgent(AgentData agentData)
+    {
+        GameObject agent = new GameObject("Agent_" + agentData.AgentID);
+        agent.transform.position = new Vector3(agentData.Position[0], 0, agentData.Position[1]);
+
+        Agent agentComponent = agent.AddComponent<Agent>();
+        agentComponent.Carrying = agentData.Carrying;
+          Debug.Log($"AgentID: {agentData.AgentID}, Position: ( {agentData.Position[0]}, {agentData.Position[1]} ), Carrying: {agentData.Carrying}");
+    }
 }
-    
-}
+
+
+
