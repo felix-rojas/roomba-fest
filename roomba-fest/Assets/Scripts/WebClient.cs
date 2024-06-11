@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 public class WebClient : MonoBehaviour
 {
     public GameObject GridInstance;
-    public GameObject AgentManager;
+    public GameObject agentPrefab;
 
     // IEnumerator - yield return
     IEnumerator SendData(string data)
@@ -79,20 +79,22 @@ public class WebClient : MonoBehaviour
     {
     }
 
-    public string[] gridInfo(string grid)
+    public void gridInfo(string grid)
     {
         string[] grid_info = grid.Split(",");
+        Debug.Log(grid);
         GridInstance.SendMessage("SpawnObjects", grid_info);
-        return grid_info;
     }
 
     void CreateAgent(AgentData agentData)
     {
-        GameObject agent = new GameObject("Agent_" + agentData.AgentID);
+        GameObject agent = Instantiate(agentPrefab);
         agent.transform.position = new Vector3(agentData.Position[0], 0, agentData.Position[1]);
 
         Agent agentComponent = agent.AddComponent<Agent>();
         agentComponent.Carrying = agentData.Carrying;
+        agentComponent.AgentID = agentData.AgentID;
+        
           Debug.Log($"AgentID: {agentData.AgentID}, Position: ( {agentData.Position[0]}, {agentData.Position[1]} ), Carrying: {agentData.Carrying}");
     }
 }

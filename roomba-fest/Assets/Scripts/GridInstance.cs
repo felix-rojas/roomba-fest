@@ -16,6 +16,13 @@ public class GridInstance : MonoBehaviour
         height = int.Parse(initgrid[0]);
         
         width = int.Parse(initgrid[1]);
+        
+        string[] temp = new string[initgrid.Length-2];
+
+        for (int i = 2; i < initgrid.Length; i++){
+        temp[i-2] = initgrid[i];
+        Debug.Log(temp[i-2]);
+}
         Debug.Log($"{height}, {width}");
         
         for (int i = -1; i < height; i++) {
@@ -27,22 +34,23 @@ public class GridInstance : MonoBehaviour
             Instantiate(wallPrefab, new Vector3(i,0,-1), Quaternion.identity);
             }
         
-        for (int i=2; i<height+2; i++){
-            for (int j=2; j<width+2; j++){
-                if(initgrid[(i-2)*(j-2)+(i-2)] == "X"){
+for (int i=0; i<height; i++){
+            for (int j=0; j<width; j++){
+                if(temp[i*width+j] == "X"){
                     //Instance wall vector 3d (i, j,0)
-                    Instantiate(wallPrefab, new Vector3(i-2,0,j-2), Quaternion.identity);
+                    Instantiate(wallPrefab, new Vector3(i,0,j), Quaternion.identity);
                 }
-                else if(initgrid[(i-2)*(j-2)+(i-2)] == "P"){
+                else if(temp[i*width+j] == "P"){
                     //Instance papelero
-                     Instantiate(papeleroPrefab, new Vector3(i-2, 0, j-2), Quaternion.identity);
+                        Debug.Log($"BRO IM RIGHT HERE AT {i}, {j}");
+                     Instantiate(papeleroPrefab, new Vector3(i, 0, j), Quaternion.identity);
                 }
                 else{
                     int number;
-                    if(int.TryParse(initgrid[(i-2)*(j-2)+(i-2)], out number)){
+                    if(int.TryParse(temp[i*width+j], out number)){
                         for(int g=0; g< number;g++){
                             //Instance wall
-                            if (number > 0) Instantiate(Trash, new Vector3(i-2, g, j-2), Quaternion.identity);
+                            if (number > 0) Instantiate(Trash, new Vector3(i, g, j), Quaternion.identity);
                         }
                         
                     }

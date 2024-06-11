@@ -54,15 +54,17 @@ def leer_grid(nombre_archivo):
 # Llama a la función para leer el archivo
 #OFICINA, PAPELERA_POS, alto, ancho = leer_grid(file_name)
 
-ALTO = 5
-ANCHO = 6
-OFICINA, PAPELERA_POS = generate_test_grid(ANCHO, ALTO)
+#ALTO = 5
+#ANCHO = 6
+#OFICINA, PAPELERA_POS = generate_test_grid(ANCHO, ALTO)
+OFICINA, PAPELERA_POS, ANCHO, ALTO = leer_grid(file_name)
+
 print(OFICINA)
 print(PAPELERA_POS)
 
 MAX_ITER = 2000
 AGENT_NUM = 5
-model = OficinaModel.OficinaModel(ANCHO, ALTO, AGENT_NUM)
+model = OficinaModel.OficinaModel(width=ANCHO, height=ALTO, num_agents=AGENT_NUM, initial_grid=OFICINA, papelera_coordinates=PAPELERA_POS)
 
 CURRENT_ITER = -1
 def advanceSimulation():
@@ -71,12 +73,11 @@ def advanceSimulation():
     last_step = info.index.get_level_values("Step").max()
     position = info.xs(last_step, level="Step")
     res = position.reset_index()
-    print(res.to_json(orient='records'))
     return res.to_json(orient='records')
 def sendGrid():
-    rows = len(model.initial_grid.tolist())
-    cols = len(model.initial_grid.tolist()[0])    
-    grid_list = model.initial_grid.tolist()
+    rows = len(model.initial_grid)
+    cols = len(model.initial_grid[0])    
+    grid_list = model.initial_grid
     res = [str(rows),str(cols)]
     for lists in grid_list:
         for item in lists:

@@ -31,6 +31,7 @@ def getGrid(model):
                 grid[x][y] = 0  # Celda vacía
     return grid
 
+"""
 def generate_test_grid(width = 10, height = 10, wall_percentage=0.2, max_garbage_per_cell=8, min_empty_cells = 0.5):
     test_grid = np.random.choice(max_garbage_per_cell,width*height).astype("str")
     min_empty_cells = int(round(min_empty_cells * (width * height)))
@@ -41,10 +42,10 @@ def generate_test_grid(width = 10, height = 10, wall_percentage=0.2, max_garbage
     np.random.shuffle(test_grid)
     test = test_grid.reshape(width,height)
     return test, np.argwhere(test=="P")[0]
-
+"""
 
 class OficinaModel(Model):
-    def __init__(self, width, height, num_agents = 5):
+    def __init__(self, width, height, initial_grid, papelera_coordinates, num_agents = 5):
         super().__init__()
         self.cells = np.zeros((width, height))
         self.num_agents = num_agents
@@ -55,7 +56,8 @@ class OficinaModel(Model):
         self.basuraRestante = 0
         self.width = width
         self.height = height
-        self.initial_grid, self.papelera_coords = generate_test_grid(width=width, height=height)
+        self.initial_grid = initial_grid
+        self.papelera_coords = papelera_coordinates
 
         self.datacollector = DataCollector(model_reporters = {"Grid": "initial_grid", "TrashBin": "papelera_coords" , "GridStatus": getGrid}, 
                                            agent_reporters = {"Position": "pos", "Carrying": "carrying" })
