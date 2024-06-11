@@ -42,7 +42,7 @@ public class GridInstance : MonoBehaviour
                     if(int.TryParse(initgrid[(i-2)*(j-2)+(i-2)], out number)){
                         for(int g=0; g< number;g++){
                             //Instance wall
-                            Instantiate(Trash, new Vector3(i-2, g, j-2), Quaternion.identity);
+                            if (number > 0) Instantiate(Trash, new Vector3(i-2, g, j-2), Quaternion.identity);
                         }
                         
                     }
