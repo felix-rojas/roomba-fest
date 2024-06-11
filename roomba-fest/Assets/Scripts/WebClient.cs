@@ -71,6 +71,7 @@ public class WebClient : MonoBehaviour
         //string call = "What's up?";
         Vector3 fakePos = new Vector3(3.44f, 0, -15.707f);
         string json = EditorJsonUtility.ToJson(fakePos);
+        
         //StartCoroutine(SendData(call));
         StartCoroutine(GetGridData());
         StartCoroutine(SendData(json));
