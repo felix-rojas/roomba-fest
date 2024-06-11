@@ -21,18 +21,18 @@ public class GridInstance : MonoBehaviour
             for (int j=2; j<width; j++){
                 if(initgrid[i+j*i] == "X"){
                     //Instance wall vector 3d (i, j,0)
-                    Instantiate(wallPrefab, new Vector3(i, j, 0), Quaternion.identity);
+                    Instantiate(wallPrefab, new Vector3(i,0 , j), Quaternion.identity);
                 }
                 else if(initgrid[i+j*i] == "P"){
                     //Instance papelero
-                     Instantiate(papeleroPrefab, new Vector3(i, j, 0), Quaternion.identity);
+                     Instantiate(papeleroPrefab, new Vector3(i, 0, j), Quaternion.identity);
                 }
                 else{
                     int number;
                     if(int.TryParse(initgrid[i+j*i], out number)){
                         for(int g=0; g<= number;g++){
                             //Instance wall
-                            Instantiate(Trash, new Vector3(i, j, 0), Quaternion.identity);
+                            Instantiate(Trash, new Vector3(i, 0, j), Quaternion.identity);
                         }
                         
                     }
