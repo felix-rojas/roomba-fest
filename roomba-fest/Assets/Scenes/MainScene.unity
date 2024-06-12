@@ -214,6 +214,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridInstance: {fileID: 1424227922}
   agentPrefab: {fileID: 1886699580}
+  stepInterval: 0.3
+  stepTimer: 0.3
 --- !u!4 &197337681
 Transform:
   m_ObjectHideFlags: 0
@@ -284,6 +286,10 @@ PrefabInstance:
     - target: {fileID: 3017849234472675050, guid: 975e98e88c84cb94786a810bddaa79fe, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3017849234472675050, guid: 975e98e88c84cb94786a810bddaa79fe, type: 3}
+      propertyPath: m_TagString
+      value: Trash
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -402,6 +408,10 @@ PrefabInstance:
     - target: {fileID: 2021929417151025362, guid: b82b800a9ec0e6f41bfc2b94c83d4143, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2021929417151025362, guid: b82b800a9ec0e6f41bfc2b94c83d4143, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 5125861779570215612, guid: b82b800a9ec0e6f41bfc2b94c83d4143, type: 3}
       propertyPath: m_LocalPosition.x

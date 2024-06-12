@@ -119,8 +119,35 @@ public class WebClient : MonoBehaviour
     {
         var a = GameObject.FindGameObjectsWithTag($"{id}"); 
         var agent = a[0];
+
         agent.transform.position = new Vector3(agentData.Position[0], 0, agentData.Position[1]);
-        agent.GetComponent<Agent>().Carrying = agentData.Carrying;
+        // this could be an error if READ-ONLY        
+        // agent.GetComponent<Agent>().Carrying = agentData.Carrying;
+        Agent agentComponent = agent.AddComponent<Agent>();
+        agentComponent.Carrying = agentData.Carrying;
+
+        var trash_remove_count = agentData.Carrying;
+        var trash_list = GameObject.FindGameObjectsWithTag("Trash");
+        
+            int count = 0;
+        foreach (GameObject trash in trash_list)
+        {
+            Vector3 pos_vec = trash.GetComponent<Transform>().position;
+            if (pos_vec.x == agentData.Position[0] && pos_vec.z == agentData.Position[1])
+            {
+                if (count < trash_remove_count) 
+                    { 
+                        Destroy(trash);
+                        Debug.Log($"Removed trash at {pos_vec.x} , {pos_vec.y}, {pos_vec.z}");
+                        count+= 1; 
+                        Debug.Log($"Removed {count} trash");
+                    }
+                else 
+                    {
+                        count = 0;
+                    }
+            }
+        }
         
           Debug.Log($"AgentID: {agentData.AgentID}, Position: ( {agentData.Position[0]}, {agentData.Position[1]} ), Carrying: {agentData.Carrying}");
     }

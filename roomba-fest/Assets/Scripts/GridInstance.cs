@@ -42,15 +42,16 @@ for (int i=0; i<height; i++){
                 }
                 else if(temp[i*width+j] == "P"){
                     //Instance papelero
-                        Debug.Log($"BRO IM RIGHT HERE AT {i}, {j}");
                      Instantiate(papeleroPrefab, new Vector3(i, 0, j), Quaternion.identity);
                 }
                 else{
                     int number;
                     if(int.TryParse(temp[i*width+j], out number)){
                         for(int g=0; g< number;g++){
-                            //Instance wall
-                            if (number > 0) Instantiate(Trash, new Vector3(i, g, j), Quaternion.identity);
+                            if (number > 0) {
+                                GameObject t = Instantiate(Trash, new Vector3(i, g, j), Quaternion.identity);
+                                t.tag = "Trash";
+                            }
                         }
                         
                     }

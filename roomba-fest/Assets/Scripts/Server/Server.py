@@ -24,8 +24,9 @@ class Server(BaseHTTPRequestHandler):
 
     def do_POST(self):
         response = SimulationV1.advanceSimulation()
-        self._set_response()
-        self.wfile.write(response.encode('utf-8'))
+        if response != "DONE":
+            self._set_response()
+            self.wfile.write(response.encode('utf-8'))
 
 
 def run(server_class=HTTPServer, handler_class=Server, port=8585):

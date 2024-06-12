@@ -76,7 +76,8 @@ def advanceSimulation():
         res = position.reset_index()
         return res.to_json(orient='records')
     else: 
-        return ("DONE")  
+        print(f"Finished in {model.currentStep} steps")
+        return "DONE"  
 def sendGrid():
     rows = len(model.initial_grid)
     cols = len(model.initial_grid[0])    
