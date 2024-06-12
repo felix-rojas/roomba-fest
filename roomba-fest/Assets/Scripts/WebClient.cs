@@ -135,9 +135,9 @@ public class WebClient : MonoBehaviour
             Vector3 pos_vec = trash.GetComponent<Transform>().position;
             if (pos_vec.x == agentData.Position[0] && pos_vec.z == agentData.Position[1])
             {
-                if (count < trash_remove_count) 
+                if (count < trash_remove_count && trash.activeSelf) 
                     { 
-                        Destroy(trash);
+                        trash.SetActive(false);
                         Debug.Log($"Removed trash at {pos_vec.x} , {pos_vec.y}, {pos_vec.z}");
                         count+= 1; 
                         Debug.Log($"Removed {count} trash");

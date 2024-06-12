@@ -289,7 +289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3017849234472675050, guid: 975e98e88c84cb94786a810bddaa79fe, type: 3}
       propertyPath: m_TagString
-      value: Trash
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -412,6 +412,10 @@ PrefabInstance:
     - target: {fileID: 2021929417151025362, guid: b82b800a9ec0e6f41bfc2b94c83d4143, type: 3}
       propertyPath: m_TagString
       value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 2021929417151025362, guid: b82b800a9ec0e6f41bfc2b94c83d4143, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5125861779570215612, guid: b82b800a9ec0e6f41bfc2b94c83d4143, type: 3}
       propertyPath: m_LocalPosition.x
@@ -640,6 +644,10 @@ PrefabInstance:
     - target: {fileID: 252413919567582462, guid: 0b8732f7dd49be64a9ffa46451b39353, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 252413919567582462, guid: 0b8732f7dd49be64a9ffa46451b39353, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 498635030330033669, guid: 0b8732f7dd49be64a9ffa46451b39353, type: 3}
       propertyPath: m_LocalPosition.x
