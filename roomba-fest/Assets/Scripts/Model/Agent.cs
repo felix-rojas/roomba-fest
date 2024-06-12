@@ -6,6 +6,7 @@ public class Agent : MonoBehaviour
 {
     public int Carrying;
     public int AgentID;
+    public GameObject prefab;
     // Start is called before the first frame update
     void Start()
     {

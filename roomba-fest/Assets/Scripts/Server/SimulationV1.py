@@ -68,12 +68,15 @@ model = OficinaModel.OficinaModel(width=ANCHO, height=ALTO, num_agents=AGENT_NUM
 
 CURRENT_ITER = -1
 def advanceSimulation():
-    model.step()
-    info = model.datacollector.get_agent_vars_dataframe()
-    last_step = info.index.get_level_values("Step").max()
-    position = info.xs(last_step, level="Step")
-    res = position.reset_index()
-    return res.to_json(orient='records')
+    if not model.SimulationDone():
+        model.step()
+        info = model.datacollector.get_agent_vars_dataframe()
+        last_step = info.index.get_level_values("Step").max()
+        position = info.xs(last_step, level="Step")
+        res = position.reset_index()
+        return res.to_json(orient='records')
+    else: 
+        return ("DONE")  
 def sendGrid():
     rows = len(model.initial_grid)
     cols = len(model.initial_grid[0])    

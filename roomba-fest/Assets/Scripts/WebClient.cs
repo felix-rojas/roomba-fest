@@ -13,6 +13,9 @@ public class WebClient : MonoBehaviour
 {
     public GameObject GridInstance;
     public GameObject agentPrefab;
+    bool alreadyCreated = false;
+    public float stepInterval = 2.0f;
+    public float stepTimer = 2.0f;
 
     // IEnumerator - yield return
     IEnumerator SendData(string data)
@@ -36,10 +39,22 @@ public class WebClient : MonoBehaviour
             {
                 string jsonData = www.downloadHandler.text;
                 List<AgentData> agents = JsonUtility.FromJson<AgentList>("{\"agents\":" + jsonData + "}").agents;
-                foreach (var agentData in agents)
+                if (!alreadyCreated)
                 {
-                    CreateAgent(agentData);
+                foreach (var agentData in agents)
+                    {
+                        CreateAgent(agentData);
+                    }
+                alreadyCreated = true;
+                
                 }
+                
+                else {
+                        foreach (var agentData in agents)
+                        {
+                            UpdateAgent(agentData, agentData.AgentID);
+                        }   
+                    }
             }
         }
     }
@@ -77,6 +92,8 @@ public class WebClient : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        stepTimer -= Time.deltaTime;
+        if (stepTimer <= 0){ StartCoroutine(SendData("hi")); stepTimer = stepInterval ;}
     }
 
     public void gridInfo(string grid)
@@ -89,11 +106,21 @@ public class WebClient : MonoBehaviour
     void CreateAgent(AgentData agentData)
     {
         GameObject agent = Instantiate(agentPrefab);
+        agent.tag = $"{agentData.AgentID}";
         agent.transform.position = new Vector3(agentData.Position[0], 0, agentData.Position[1]);
 
         Agent agentComponent = agent.AddComponent<Agent>();
         agentComponent.Carrying = agentData.Carrying;
         agentComponent.AgentID = agentData.AgentID;
+        
+          Debug.Log($"AgentID: {agentData.AgentID}, Position: ( {agentData.Position[0]}, {agentData.Position[1]} ), Carrying: {agentData.Carrying}");
+    }
+        void UpdateAgent(AgentData agentData, int id)
+    {
+        var a = GameObject.FindGameObjectsWithTag($"{id}"); 
+        var agent = a[0];
+        agent.transform.position = new Vector3(agentData.Position[0], 0, agentData.Position[1]);
+        agent.GetComponent<Agent>().Carrying = agentData.Carrying;
         
           Debug.Log($"AgentID: {agentData.AgentID}, Position: ( {agentData.Position[0]}, {agentData.Position[1]} ), Carrying: {agentData.Carrying}");
     }
