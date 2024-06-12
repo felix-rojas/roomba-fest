@@ -50,7 +50,6 @@ def leer_grid(nombre_archivo):
                 papelera_pos_ = (i - 1, fila.index('P'))
         return oficina_, papelera_pos_, n, m
 
-
 # Llama a la función para leer el archivo
 #OFICINA, PAPELERA_POS, alto, ancho = leer_grid(file_name)
 
@@ -75,9 +74,14 @@ def advanceSimulation():
         position = info.xs(last_step, level="Step")
         res = position.reset_index()
         return res.to_json(orient='records')
-    else: 
-        print(f"Finished in {model.currentStep} steps")
-        return "DONE"  
+    else:
+        model.step()
+        info = model.datacollector.get_agent_vars_dataframe()
+        last_step = info.index.get_level_values("Step").max()
+        position = info.xs(last_step, level="Step")
+        res = position.reset_index()
+        print(f"Finished in {model.currentStep} steps")  
+        return res.to_json(orient='records')
 def sendGrid():
     rows = len(model.initial_grid)
     cols = len(model.initial_grid[0])    
