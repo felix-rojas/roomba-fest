@@ -2,15 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+///<summary>
+/// This class instantiates all the necessary agents from the python grid. 
+///</summary>
 public class GridInstance : MonoBehaviour
 {
+    
     public GameObject web;
     [SerializeField] GameObject wallPrefab; // Prefab del muro
     [SerializeField] GameObject papeleroPrefab; // Prefab del papelero
     [SerializeField] GameObject Trash; // Prefab del papelero
     int height, width;
     string[] initgrid;
-    // Start is called before the first frame update
+    
+    ///<summary>
+    /// SpawnObjects takes in the initial grid from the WebCLient.
+    /// The first two objects are the grid height, width
+    /// followed by a linear representation of the grid which is converted 
+    ///</summary>
     void SpawnObjects(string[] initgrid)
     {
         height = int.Parse(initgrid[0]);

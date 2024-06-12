@@ -8,7 +8,11 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-
+///<summary>
+/// WebClient sends and receives data to update the grid and its agents
+/// SendData uses a POST to make the server update to the next step 
+/// GetGridData uses a GET to obtain the initial layout 
+///</summary>
 public class WebClient : MonoBehaviour
 {
     public GameObject GridInstance;
@@ -18,6 +22,11 @@ public class WebClient : MonoBehaviour
     public float stepTimer = 2.0f;
 
     // IEnumerator - yield return
+    ///<summary> 
+    /// The POST query is sent and the agents update their position
+    /// once the query has been validated into a string "jsonData""
+    /// this string is serialized 
+    ///</summary>
     IEnumerator SendData(string data)
     {
         WWWForm form = new WWWForm();
@@ -90,12 +99,19 @@ public class WebClient : MonoBehaviour
     }
 
     // Update is called once per frame
+    ///<summary> 
+    /// The POST query is sent every stepInterval seconds
+    ///</summary>
     void Update()
     {
         stepTimer -= Time.deltaTime;
         if (stepTimer <= 0){ StartCoroutine(SendData("hi")); stepTimer = stepInterval ;}
     }
 
+    ///<summary> 
+    /// Auxiliary function to process the initial grid setup
+    /// Signals the GridInstance class with the information to generate the grid
+    ///</summary>
     public void gridInfo(string grid)
     {
         string[] grid_info = grid.Split(",");
@@ -103,6 +119,10 @@ public class WebClient : MonoBehaviour
         GridInstance.SendMessage("SpawnObjects", grid_info);
     }
 
+    ///<summary> 
+    /// Auxiliary function to instantiate agents
+    /// Assigns each agent an id, the number of carrying boxes at step 0
+    ///</summary>
     void CreateAgent(AgentData agentData)
     {
         GameObject agent = Instantiate(agentPrefab);
@@ -115,6 +135,12 @@ public class WebClient : MonoBehaviour
         
           Debug.Log($"AgentID: {agentData.AgentID}, Position: ( {agentData.Position[0]}, {agentData.Position[1]} ), Carrying: {agentData.Carrying}");
     }
+
+    ///<summary> 
+    /// Auxiliary function update agent values
+    /// Assigns the position values to the agents and their carrying capacity
+    /// deactivates the boxes which the agent is carrying in the same x and z position
+    ///</summary>
         void UpdateAgent(AgentData agentData, int id)
     {
         var a = GameObject.FindGameObjectsWithTag($"{id}"); 
